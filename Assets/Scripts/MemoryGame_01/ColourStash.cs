@@ -27,6 +27,7 @@ public class CustomMaterial
 public class MaterialCheck
 {
     public Material customMat;
+    public TileImage tileImageData;
     public bool bIsValid = true;
 
     public MaterialCheck(bool _check = true)
@@ -92,8 +93,8 @@ public class ColourStash : MonoBehaviour
             for (int i = materials.Count - 1; i >= max; i--)
             {
                 materials.RemoveAt(i);
-                Debug.Log(materials.Count + "MATCOUNT");
-                Debug.Log(max + "MAX");
+                //Debug.Log(materials.Count + "MATCOUNT");
+                //Debug.Log(max + "MAX");
             }
         }
     }

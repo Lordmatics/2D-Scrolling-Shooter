@@ -2,19 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class Grid
+//[System.Serializable]
+[CreateAssetMenu(fileName = "Data", menuName = "CustomAsset/MemoryGame/Grid", order = 1)]
+public class Grid : ScriptableObject
 {
-    public float rows;
-    public float columns;
+    public int rows;
+    public int columns;
     public Vector3 gridStart;
-
-    public Grid(Vector3 offset = new Vector3(), float r = 6.0f, float c = 6.0f)
-    {
-        offset = new Vector3(14.5f, 0.0f, -14.5f);
-        rows = r;
-        columns = c;
-    }
 }
 
 [System.Serializable]
@@ -37,14 +31,7 @@ public class ClickedTilesContainer
 public class MemoryGame : MonoBehaviour
 {
 
-    [SerializeField]
-    private Grid grid = new Grid();
-
-    [SerializeField]
-    private float tileWidth = 5.5f;
-
-    [SerializeField]
-    private float tileHeight = 5.5f;
+    public static bool bUseColour = true;
 
     [SerializeField]
     private List<GameObject> tileArray = new List<GameObject>();
@@ -77,6 +64,11 @@ public class MemoryGame : MonoBehaviour
 
         //CreateGrid();
         ShowButton();
+    }
+    
+    public void CustomiseSettings(bool _settings)
+    {
+        bUseColour = _settings;
     }
 
     #region  _PLAY_AGAIN_BUTTON_
@@ -120,14 +112,22 @@ public class MemoryGame : MonoBehaviour
         }
     }
 
+    void AdjustGridLayout()
+    {
+        GameObject gridTilesContainer = GameObject.FindGameObjectWithTag("GameTiles");
+        UnityEngine.UI.GridLayoutGroup layoutGroup = gridTilesContainer.GetComponent<UnityEngine.UI.GridLayoutGroup>();
+        layoutGroup.constraint = UnityEngine.UI.GridLayoutGroup.Constraint.FixedColumnCount;
+        layoutGroup.constraintCount = difficultyScript.GetGridSettings().columns;
+    }
+
     public void CreateGrid()
     {
         HideButton();
         ClearExistingGrid();
-
+        AdjustGridLayout();
         if (difficultyScript != null)
         {
-            Debug.Log("SCRIPT");
+            //Debug.Log("SCRIPT");
 
             Vector3 gridStart = difficultyScript.GetGridSettings().gridStart;
 
@@ -136,10 +136,13 @@ public class MemoryGame : MonoBehaviour
             {
                 for (int j = 0; j < difficultyScript.GetGridSettings().columns; j++)
                 {
-                    Vector3 pos = gridStart + new Vector3(j * tileWidth, 0.0f, i * -tileHeight);
-                    GameObject prefab = BuildTile.instance.InstantiateTileAt(pos);
+                    Vector3 pos = gridStart + new Vector3(j * Tile.tileWidth, 0.0f, i * -Tile.tileHeight);
+                    GameObject prefab = BuildTile.instance.InstantiateTileAt(pos, true);
                     if (prefab != null)
                     {
+                        RectTransform rectTrans = prefab.GetComponent<RectTransform>();
+                        rectTrans.SetPosition(pos);
+                        //prefab.transform.SetPosition(pos);
                         tileArray.Add(prefab);
                         Tile tileScript = prefab.GetComponent<Tile>();
                         if (tileScript != null)
@@ -192,7 +195,6 @@ public class MemoryGame : MonoBehaviour
         {
             // Gain Score
             // Lock Tiles
-            Debug.Log("CORRECT");
             int affectedScore = correctValueScore + (successStreak * correctValueScore);
             Score.instance.ModifyScore(affectedScore);
             TileOutcome.instance.UpdateText(affectedScore, true);
@@ -204,6 +206,7 @@ public class MemoryGame : MonoBehaviour
         {
             Score.instance.ModifyScore(-correctValueScore);
             TileOutcome.instance.UpdateText(correctValueScore);
+            successStreak = 0;
 
             yield return new WaitForSeconds(delay);
             tileScriptA.FlipDown();
@@ -222,11 +225,18 @@ public class MemoryGame : MonoBehaviour
         int condition = ((int)difficultyScript.currentSelectedDimension.grid.rows * (int)difficultyScript.currentSelectedDimension.grid.columns ) / 2;
         if(matchesMade >= condition)
         {
-            TileOutcome.instance.EndOfGameText();
-            matchesMade = 0;
-            ShowButton();
-            ColourStash.instance.RefillMaterialArray();
+            ResetGame();
         }
+    }
+
+    public void ResetGame()
+    {
+        TileOutcome.instance.EndOfGameText();
+        matchesMade = 0;
+        ShowButton();
+        ColourStash.instance.RefillMaterialArray();
+       
+        //difficultyScript = null;
     }
     #endregion
 }

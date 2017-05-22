@@ -9,8 +9,8 @@ public class GridDimension : MonoBehaviour
     [SerializeField]
     private MyDimension dimension;
 
-    
-    public Grid grid = new Grid();
+
+    public Grid grid;
 
     [SerializeField]
     private Color selectedColor;

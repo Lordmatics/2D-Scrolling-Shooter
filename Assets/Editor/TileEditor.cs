@@ -12,5 +12,14 @@ public class TileEditor : Editor
         EditorGUILayout.HelpBox("This script contains the tile data", MessageType.Info);
 
         base.OnInspectorGUI();
+
+        Tile script = (Tile)target;
+        if(GUILayout.Button("LiveUpdate Scale"))
+        {
+            if(script)
+            {
+                script.UpdateHoverScale();
+            }
+        }
     }
 }
