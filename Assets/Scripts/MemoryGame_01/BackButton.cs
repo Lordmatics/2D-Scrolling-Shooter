@@ -16,9 +16,4 @@ public class BackButton : MonoBehaviour
 
         // ReEnable Settings window
     }
-
-    public void SetVisibilit(bool _state)
-    {
-        gameObject.SetActive(_state);
-    }
 }

@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //[System.Serializable]
-[CreateAssetMenu(fileName = "Data", menuName = "CustomAsset/MemoryGame/Grid", order = 1)]
-public class Grid : ScriptableObject
-{
-    public int rows;
-    public int columns;
-    public Vector3 gridStart;
-}
 
 [System.Serializable]
 public class ClickedTilesContainer
@@ -57,11 +50,13 @@ public class MemoryGame : MonoBehaviour
     [SerializeField]
     private Difficulty difficultyScript;
 
+    public GameObject backToMenuButton;
+
     void Start()
     {
         playAgainButton = GameObject.FindObjectOfType<PlayAgain>().gameObject;
         settingsButton = GameObject.FindObjectOfType<Difficulty>().gameObject;
-
+        backToMenuButton = GameObject.FindObjectOfType<BackButton>().gameObject;
         //CreateGrid();
         ShowButton();
     }
@@ -82,6 +77,10 @@ public class MemoryGame : MonoBehaviour
         {
             settingsButton.gameObject.SetActive(false);
         }
+        if(backToMenuButton != null)
+        {
+            backToMenuButton.gameObject.SetActive(true);
+        }
     }
 
     void ShowButton()
@@ -93,6 +92,10 @@ public class MemoryGame : MonoBehaviour
         if (settingsButton != null)
         {
             settingsButton.gameObject.SetActive(true);
+        }
+        if (backToMenuButton != null)
+        {
+            backToMenuButton.gameObject.SetActive(false);
         }
     }
     #endregion
@@ -129,20 +132,16 @@ public class MemoryGame : MonoBehaviour
         {
             //Debug.Log("SCRIPT");
 
-            Vector3 gridStart = difficultyScript.GetGridSettings().gridStart;
+            //Vector3 gridStart = difficultyScript.GetGridSettings().gridStart;
 
             int counter = 0;
             for (int i = 0; i < difficultyScript.GetGridSettings().rows; i++)
             {
                 for (int j = 0; j < difficultyScript.GetGridSettings().columns; j++)
                 {
-                    Vector3 pos = gridStart + new Vector3(j * Tile.tileWidth, 0.0f, i * -Tile.tileHeight);
-                    GameObject prefab = BuildTile.instance.InstantiateTileAt(pos, true);
+                    GameObject prefab = BuildTile.instance.InstantiateTileAt(new Vector3(), true);
                     if (prefab != null)
                     {
-                        RectTransform rectTrans = prefab.GetComponent<RectTransform>();
-                        rectTrans.SetPosition(pos);
-                        //prefab.transform.SetPosition(pos);
                         tileArray.Add(prefab);
                         Tile tileScript = prefab.GetComponent<Tile>();
                         if (tileScript != null)

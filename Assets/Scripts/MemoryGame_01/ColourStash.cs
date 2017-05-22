@@ -27,8 +27,14 @@ public class CustomMaterial
 public class MaterialCheck
 {
     public Material customMat;
+    public string tileDataString = "Apple";
     public TileImage tileImageData;
     public bool bIsValid = true;
+
+    void Start()
+    {
+        tileImageData = (TileImage)Resources.Load("TileData_"+ tileDataString, typeof(TileImage));
+    }
 
     public MaterialCheck(bool _check = true)
     {

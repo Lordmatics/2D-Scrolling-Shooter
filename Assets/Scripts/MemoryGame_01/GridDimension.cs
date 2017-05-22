@@ -10,6 +10,8 @@ public class GridDimension : MonoBehaviour
     private MyDimension dimension;
 
 
+    public int gridIndex = 0;
+
     public Grid grid;
 
     [SerializeField]
@@ -21,7 +23,17 @@ public class GridDimension : MonoBehaviour
     {
         button = GetComponent<Button>();
 
+        grid = (Grid)Resources.Load("GridData" + gridIndex.ToString(), typeof(Grid));
+
         DetermineData();
+
+        //SerializedObject obj = new SerializedObject(grid);
+
+        //SerializedProperty serRows = obj.FindProperty("rows");
+        //SerializedProperty serCols = obj.FindProperty("columns");
+        //SerializedProperty serGridStart = obj.FindProperty("gridStart");
+
+        //EditorUtility.SetDirty(grid);     
     }
 
     void DetermineData()
@@ -31,22 +43,18 @@ public class GridDimension : MonoBehaviour
             case MyDimension.E_Easy:
                 grid.rows = 3;
                 grid.columns = 4;
-                grid.gridStart = new Vector3(-8.2f, 0.0f, 7.5f);
                 break;
             case MyDimension.E_Medium:
                 grid.rows = 4;
                 grid.columns = 4;
-                grid.gridStart = new Vector3(-8.25f, 0.0f, 10.0f);
                 break;
             case MyDimension.E_Hard:
                 grid.rows = 4;
                 grid.columns = 6;
-                grid.gridStart = new Vector3(-13.7f,0.0f,9.5f);
                 break;
             case MyDimension.E_Insane:
                 grid.rows = 6;
                 grid.columns = 6;
-                grid.gridStart = new Vector3(-14.5f,0.0f,14.5f);
                 break;
         }
     }

@@ -10,7 +10,7 @@ public class BuildTile : MonoBehaviour
 
     public static BuildTile instance;
 
-    private List<GameObject> activeTiles;
+    private List<GameObject> activeTiles = new List<GameObject>();
     
     void Awake()
     {
@@ -19,7 +19,7 @@ public class BuildTile : MonoBehaviour
 
     public GameObject InstantiateTileAt(Vector3 pos, bool bUseCanvas = false)
     {
-        if(activeTiles.Count <= 0 || activeTiles == null)
+        if(activeTiles.Count <= 0)
             activeTiles = new List<GameObject>();
         GameObject mainCanvas = GameObject.FindGameObjectWithTag("GameTiles");
         GameObject prefab = (GameObject)Instantiate(Resources.Load("TilePrefab_UI", typeof(GameObject)));
@@ -37,7 +37,7 @@ public class BuildTile : MonoBehaviour
 
     public void InstantiateTile(bool bUseCanvas = false)
     {
-        if (activeTiles.Count <= 0 || activeTiles == null)
+        if (activeTiles.Count <= 0)
             activeTiles = new List<GameObject>();
         GameObject mainCanvas = GameObject.FindGameObjectWithTag("GameTiles");
         GameObject prefab = (GameObject)Instantiate(Resources.Load("TilePrefab_UI", typeof(GameObject)));
