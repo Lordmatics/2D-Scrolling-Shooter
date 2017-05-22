@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class TileChild : MonoBehaviour {
 
+    RectTransform myTransform;
+    RectTransform parentRect;
     void Start()
     {
-        if(MemoryGame.bUseColour)
+        myTransform = GetComponent<RectTransform>(); // 
+        parentRect = transform.parent.GetComponent<RectTransform>();
+        if (MemoryGame.bUseColour)
         {
             gameObject.SetActive(false);
         }
@@ -14,5 +18,10 @@ public class TileChild : MonoBehaviour {
         {
             gameObject.SetActive(true);
         }
+    }
+
+    void Update()
+    {
+        myTransform = parentRect;
     }
 }

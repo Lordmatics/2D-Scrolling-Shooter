@@ -14,4 +14,19 @@ public static class Utility
     {
         trans.localScale = new Vector3(val, val, val);
     }
+
+    public static Resolution GetMonitorResolution()
+    {
+        return Screen.currentResolution;
+    }
+
+    public static float GetGameResWidth()
+    {
+        return Screen.width;
+    }
+
+    public static float GetGameResHeight()
+    {
+        return Screen.height;
+    }
 }
